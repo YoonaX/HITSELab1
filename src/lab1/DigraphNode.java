@@ -11,5 +11,6 @@ public class DigraphNode
 	{
 		Next = null;
 		AdjPointNumber = 0;
-	}
+
+		}
 }

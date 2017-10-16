@@ -697,8 +697,6 @@ public class Digraph
 		else
 		{
 			
-			
-			
 			DigraphNode node = HeadNodeList.get(i);
 			int child=(int)(Math.random() * node.AdjPointNumber);
 			for(i=0; i<=child ; i++)

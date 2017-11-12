@@ -1,4 +1,5 @@
 package lab1;
+
 import java.util.Vector;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.io.FileInputStream;
 import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.Comparator;
+
 
 public class Digraph
 {
@@ -42,7 +44,7 @@ public class Digraph
 		int Size = HeadNodeList.size();
 		for (; i < Size; i++)
 		{
-			if (CurNodeKey.equals (HeadNodeList.get(i).Words))//±éÀú±íÍ·½Úµã,µ¥´ÊÁ¬ĞøÖØ¸´µÄÇé¿ö
+			if (CurNodeKey.equals (HeadNodeList.get(i).Words))//éå†è¡¨å¤´èŠ‚ç‚¹,å•è¯è¿ç»­é‡å¤çš„æƒ…å†µ
 			{
 				DigraphNode Node = HeadNodeList.get(i);
 
@@ -65,10 +67,10 @@ public class Digraph
 				break;
 			}
 		}
-		if (i == Size)//³öÏÖĞÂµÄ±íÍ·½Úµã
+		if (i == Size)//å‡ºç°æ–°çš„è¡¨å¤´èŠ‚ç‚¹
 		{
 			DigraphNode HeadNode = new DigraphNode();
-			HeadNode.Next = HeadNode.Next = NewNode;//¸Ä
+			HeadNode.Next = HeadNode.Next = NewNode;//æ”¹
 			HeadNode.Words = CurNodeKey;
 			HeadNode.AdjPointNumber ++;
 			NewNode.Next = null;
@@ -133,7 +135,7 @@ public class Digraph
 	     ||  ((char)tempchar >= 'A' && (char)tempchar <= 'Z'))
 		{
 			if ((char)tempchar >= 'A' && (char)tempchar <= 'Z')
-                tempchar += 32;//´óĞ¡Ğ´×ª»»
+                tempchar += 32;//å¤§å°å†™è½¬æ¢
 			if (CurFlag == 1)
 				CurNodeKey.append((char)tempchar);
 			else
@@ -165,7 +167,6 @@ public class Digraph
 		return CurFlag;
 	}
 
-
 	public String GetBridgeWords(String StartString, String EndString)
 	{
 		String Str;
@@ -173,7 +174,6 @@ public class Digraph
 		KeyNode.clear();
 		KeyNode.add(StartString);
 		KeyNode.add(EndString);
-		Vector<String> BridgeWords = new Vector<String>();
 		for (int i = 0; i < HeadNodeList.size(); i++)
 		{
 			if (StartString.equals(HeadNodeList.get(i).Words))
@@ -181,14 +181,8 @@ public class Digraph
 				if (NodeList.contains(EndString))
 				{
 					GBridgeWords(StartString, EndString, i);
-					if (BridgeWords.size() >= 1)
-						return BridgeWords.get(0);
-					else
-					{
-						Str = "No bridge words from " + "\"" + StartString + "\"" +" to \"" + EndString + "\" !";
+					Str = "No bridge words from " + "\"" + StartString + "\"" +" to \"" + EndString + "\" !";
 					    return Str;
-					}
-
 				}
 				Str =  "No "  + "\"" + EndString + "\" in the graph!";
 				return Str;
@@ -260,8 +254,29 @@ public class Digraph
 		return Result;
 	}
 
+
 	public String TwoPointsGetShortPath(String Start, String End)
 	{
+		NodeShortPath.clear();
+
+		int T1 = 0;
+		int T2 = 0;
+		for (int i = 0; i < NodeList.size(); i++)
+		{
+			if (NodeList.get(i).equals(Start) )
+				T1++;
+			if (NodeList.get(i).equals(End))
+				T2++;
+			if (T1 == 1 && T2 == 1)
+				break;
+		}
+		if (T1 == 0 && T2 == 0)
+			return  "\"" + Start + "\"" + " å’Œ  " + "\"" + End + "\"" +" ä¸åœ¨å›¾ä¸­\n";
+		if (T1 == 0)
+			return  "\"" + Start + "\"" + " ä¸åœ¨å›¾ä¸­\n";
+		if (T2 == 0)
+			return  "\"" + End + "\"" + " ä¸åœ¨å›¾ä¸­\n";
+
 		KeyNode.clear();
 		Comparator<PQueue> Order = new Comparator<PQueue>()
 		{
@@ -270,14 +285,8 @@ public class Digraph
 				return (S1.Costs - S2.Costs);
 			}
 		};
-
 		PriorityQueue<PQueue> D = new  PriorityQueue<PQueue>(Order);
-
-		NodeShortPath.clear();
-
 		OnePointGetShortPath(D, NodeShortPath, Start);
-
-
 		for (int i = 0;i < NodeShortPath.size(); i++)
 	    {
 	    	if (NodeShortPath.get(i).End.equals(End))
@@ -287,28 +296,33 @@ public class Digraph
 	    	}
 	    }
 
-	    String S = "\"" + Start + "\" Óë " + "\"" + End + "\" ²»¿É´ï";
-	    return S;
+		if (ShortPath.size() == 0)
+		{
+			String S = "\"" + Start + "\" ä¸ " + "\"" + End + "\" ä¸å¯è¾¾\n";
+			return S;
+		}
+
+        return "hava";
 }
 
 	public void DInit(PriorityQueue<PQueue> D, Vector<PQueue> NodeShortPath, String Start)
 	{
-		for (Iterator<String> it = NodeList.iterator(); it.hasNext();)//±éÀúµã¼¯ºÏ
+		for (Iterator<String> it = NodeList.iterator(); it.hasNext();)//éå†ç‚¹é›†åˆ
 	    {
 			String Str = it.next();
 			PQueue Node = new PQueue();
-			PQueue S = new PQueue();//¼ÇÂ¼×î¶ÌÂ·¾¶
+			PQueue S = new PQueue();//è®°å½•æœ€çŸ­è·¯å¾„
 	        S.Path = new Vector<String>();
-			if (!Str.equals(Start))//Èç¹û²»ÊÇÆğÊ¼µã
+			if (!Str.equals(Start))//å¦‚æœä¸æ˜¯èµ·å§‹ç‚¹
 			{
-				Node.Costs = 1000000;//³õÊ¼DÊı×é
+				Node.Costs = 1000000;//åˆå§‹Dæ•°ç»„
 				Node.End = Str;
 
 		        D.add(Node);
 
 		        S.Path.addElement(Start);
 		        S.End = Str;
-		        NodeShortPath.addElement(S);//³ö·¢µãµ½ËùÓĞµãµÄ×î¶ÌÂ·¾¶
+		        NodeShortPath.addElement(S);//å‡ºå‘ç‚¹åˆ°æ‰€æœ‰ç‚¹çš„æœ€çŸ­è·¯å¾„
 			}
 	    }
 	}
@@ -324,14 +338,14 @@ public class Digraph
 				{
 					PQueue SNode = new PQueue();
 					for (PQueue SP: D)
-				        if (SP.End.equals(Node.Words))//ÕÒµ½Í¼µÄÁÚ½ÓµãÔÚDÖĞ¶ÔÓ¦µÄ¶ÔÏó
+				        if (SP.End.equals(Node.Words))//æ‰¾åˆ°å›¾çš„é‚»æ¥ç‚¹åœ¨Dä¸­å¯¹åº”çš„å¯¹è±¡
 	    			    {
 		    				SNode = SP;
 		    				SNode.Costs = Node.Weight;
 		    				D.remove(SP);
 		    				D.add(SNode);
 
-		    				for (int k = 0; k < NodeShortPath.size(); k++)//¸üĞÂÂ·¾¶
+		    				for (int k = 0; k < NodeShortPath.size(); k++)//æ›´æ–°è·¯å¾„
 		                    {
 		                    	if (NodeShortPath.get(k).End.equals(SNode.End))
 		                        {
@@ -346,34 +360,37 @@ public class Digraph
 	    			    }
 					Node = Node.Next;
 				}
-				break;
-			}		}
+			}
+
+		}
 
 	}
 
 	public void OnePointGetShortPath(PriorityQueue<PQueue> D, Vector<PQueue> NodeShortPath, String Start)
 	{
+		NodeShortPath.clear();
+
 		DInit(D, NodeShortPath, Start);
 
         UpdataStart(D, NodeShortPath, Start);
-	    while(D.peek() != null)//³ö¶ÓÁĞ
+	    while(D.peek() != null)//å‡ºé˜Ÿåˆ—
 	    {
-	    	PQueue Node = D.poll();//ÓÅÏÈ¶ÓÁĞµÚÒ»¸öµã
+	    	PQueue Node = D.poll();//ä¼˜å…ˆé˜Ÿåˆ—ç¬¬ä¸€ä¸ªç‚¹
 	    	String TempNodeString = Node.End;
 	    	int Costs = Node.Costs;
 	        int i = 0;
-	    	for (; i < HeadNodeList.size(); i++)//ÕÒµ½¶¥µãÍ¼ÖĞ¶ÔÓ¦¶¥µã
+	    	for (; i < HeadNodeList.size(); i++)//æ‰¾åˆ°é¡¶ç‚¹å›¾ä¸­å¯¹åº”é¡¶ç‚¹
 	        	if (HeadNodeList.get(i).Words.equals(TempNodeString))
 	        		break;
 	        if (i != HeadNodeList.size())
 	        {
-	    	    DigraphNode node = HeadNodeList.get(i).Next;//Áì½Óµã
+	    	    DigraphNode node = HeadNodeList.get(i).Next;//é¢†æ¥ç‚¹
 	    	    while (node != null)
 		    	{
 		    		 for (PQueue SP: D)
-    	                 if (SP.End.equals(node.Words))//ÕÒµ½Í¼µÄÁÚ½ÓµãÔÚDÖĞ¶ÔÓ¦µÄ¶ÔÏó
+    	                 if (SP.End.equals(node.Words))//æ‰¾åˆ°å›¾çš„é‚»æ¥ç‚¹åœ¨Dä¸­å¯¹åº”çš„å¯¹è±¡
     		             {
-                            if (Costs +  node.Weight <= SP.Costs)//ÓÃµ±Ç°ÖĞ¼äµãÀ´ÆäËû¾àÀë
+                            if (Costs +  node.Weight <= SP.Costs)//ç”¨å½“å‰ä¸­é—´ç‚¹æ¥å…¶ä»–è·ç¦»
                             {
                             	int A = 0;
 			    				for (; A < NodeShortPath.size(); A++)
@@ -416,9 +433,9 @@ public class Digraph
 	                        	    {
 	                        	    	if (Costs +  node.Weight < SP.Costs)
 	                        	    	{
-	                        	    	    NodeShortPath.get(B).Costs = Costs + node.Weight;//¸üĞÂD;
+	                        	    	    NodeShortPath.get(B).Costs = Costs + node.Weight;//æ›´æ–°D;
 	                        	    	    PQueue SPNode = SP;
-	    			            	        SPNode.Costs = Costs + node.Weight;//¸üĞÂD;
+	    			            	        SPNode.Costs = Costs + node.Weight;//æ›´æ–°D;
 	    			            	        D.remove(SP);
 	    				    				D.add(SPNode);
 	                        	    	    NodeShortPath.get(B).Path.clear();
@@ -429,7 +446,6 @@ public class Digraph
 	                        	    		NodeShortPath.get(B).Path.addElement(NodeShortPath.get(A).Path.get(I));
 	                        	    	NodeShortPath.get(B).Path.addElement(node.Words);
 
-	                        	    	break;
 	                        	    }
 	                        	}
                             }
@@ -670,7 +686,7 @@ public class Digraph
 
 	public String RandomWalk(String pre)
 	{
-		if(pre=="")//³õÊ¼»¯
+		if(pre=="")//åˆå§‹åŒ–
 		{
 			KeyNode.clear();
 			for(DigraphNode n : HeadNodeList)
@@ -694,9 +710,9 @@ public class Digraph
 		}
 		if(i==HeadNodeList.size())
 			return "-end-";
+
 		else
 		{
-			
 			DigraphNode node = HeadNodeList.get(i);
 			int child=(int)(Math.random() * node.AdjPointNumber);
 			for(i=0; i<=child ; i++)

@@ -24,7 +24,6 @@ package lab1;
 ******************************************************************************
 */
 
-
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.File;
@@ -81,7 +80,7 @@ public class GraphViz
 * Where is your dot program located? It will be called externally.
 */
 //private static String DOT = "/usr/bin/dot"; // Linux
-private static String DOT = "D:\\eclipse\\Graphviz2.38\\bin\\dot.exe"; // Windows
+private static String DOT = "E:\\Graphvz\\bin\\dot.exe"; // Windows
 
 /**
 * The source of the graph written in dot language.
@@ -266,10 +265,6 @@ public void readSource(String input)
 {
 StringBuilder sb = new StringBuilder();
 
-
-
-
-
 try
 {
 FileInputStream fis = new FileInputStream(input);
@@ -284,6 +279,7 @@ dis.close();
 catch (Exception e) {
 System.err.println("Error: " + e.getMessage());
 }
+
 this.graph = sb;
 }
 
